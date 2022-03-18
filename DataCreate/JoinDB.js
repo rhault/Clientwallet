@@ -1,12 +1,9 @@
 const fs = require('fs');
-
-
-fs.readFile('client.json', (err, data) => {
-    fs.readFile('vendas.json', (err, entry) => {
+fs.readFile('clientsDB.json', (err, clientsDB) => {
+    fs.readFile('vendasDB.json', (err, vendasDB) => {
         if (err) throw err;
-        let clients = JSON.parse(data);
-        let vendas = JSON.parse(entry);
-        //clients.sic[0].compras = []
+        let clients = JSON.parse(clientsDB);
+        let vendas = JSON.parse(vendasDB);
     
         for (let i=0; i < clients.sic.length; i++) {
     
@@ -34,13 +31,3 @@ fs.readFile('client.json', (err, data) => {
         fs.writeFileSync('newBD.json', newClient);
     })
 })
-
-
-
-
-
-
-/* 
- 
-console.log(client[0].compras)
-console.log(client[1].compras) */
