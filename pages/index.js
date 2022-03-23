@@ -1,3 +1,4 @@
+import fetch from 'isomorphic-unfetch';
 import {useState, useEffect} from 'react'
 import { 
     Avatar, Box, Card, CardHeader, CardContent, Grid, List, ListItem, ListItemAvatar, 
@@ -5,7 +6,7 @@ import {
 from '@mui/material';
 import TableComp from './componentes/TableComp'
 
-const Home = () => {
+const Home = ({clients}) => {
     const [selectClient, setSelectClient] = useState();
     const [value, setValue] = useState(0);
     const [listClient, setListClient] = useState([])
@@ -38,12 +39,15 @@ const Home = () => {
             <Grid container spacing={5}>
                 <Grid item xs={12}>
                     <h1>Carteira de Clientes</h1>  
+                    {clients.map(client => (
+                        <div key={client.id}>{client.title}</div>
+                    ))}
                 </Grid>
                 <Grid item xs={4}>
                     <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                         <nav aria-label="main mailbox folders">
                             <List>  
-                                {listClient.map((client,index) => (
+                                {/* listClient.map((client,index) => (
                                    <ListItem disablePadding key={index} onClick={() => {setSelectClient(client)}}>
                                     <ListItemButton selected={selectClient.id === client.id}>
                                             <ListItemAvatar>
@@ -52,14 +56,14 @@ const Home = () => {
                                             <ListItemText primary={client.name}/>
                                         </ListItemButton>
                                     </ListItem>
-                                ))}   
+                                )) */}   
                             </List>
                         </nav>
                     </Box>
                 </Grid>
                 <Grid item xs={6}>
                     
-                    {selectClient && <Grid container justifyContent="center">
+                    {/* selectClient && <Grid container justifyContent="center">
                         <Box sx={{ width: '100%' }}>
                             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
@@ -113,11 +117,18 @@ const Home = () => {
                                 Item Three
                             </TabPanel>
                         </Box>
-                    </Grid>}
+                    </Grid> */}
                 </Grid>
             </Grid>
         </>
     );
 }
+
+Home.getInitialProps = async () => {
+    const res = await fetch('http://localhost:3000/api/clients');
+    const { data } = await res.json();
+  
+    return { clients: data }
+  }
 
 export default Home
