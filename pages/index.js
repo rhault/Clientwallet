@@ -7,7 +7,7 @@ from '@mui/material';
 import TableComp from './componentes/TableComp'
 
 const Home = ({clients}) => {
-    const [selectClient, setSelectClient] = useState();
+    const [selectClient, setSelectClient] = useState([]);
     const [value, setValue] = useState(0);
     const [listClient, setListClient] = useState([])
 
@@ -16,13 +16,8 @@ const Home = ({clients}) => {
     };
 
     useEffect(() => {
-        window.fetch('api/clients')
-        .then(res => res.json())
-        .then(({data,legth}) => {
-            setSelectClient(data[0])
-            setListClient(data)
-        })
-    }, [])
+        setSelectClient(clients[0])
+    }, [clients])
 
     const TabPanel = (props) => {
         const { children, value, index} = props;
@@ -40,23 +35,23 @@ const Home = ({clients}) => {
                 <Grid item xs={12}>
                     <h1>Carteira de Clientes</h1>  
                     {clients.map(client => (
-                        <div key={client.id}>{client.title}</div>
+                        <div key={client._id}>{client.nome}</div>
                     ))}
                 </Grid>
                 <Grid item xs={4}>
                     <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                         <nav aria-label="main mailbox folders">
                             <List>  
-                                {/* listClient.map((client,index) => (
-                                   <ListItem disablePadding key={index} onClick={() => {setSelectClient(client)}}>
-                                    <ListItemButton selected={selectClient.id === client.id}>
+                                {selectClient && clients.map((client) => (
+                                   <ListItem disablePadding key={client._id} onClick={() => {setSelectClient(client)}}>
+                                    <ListItemButton selected={selectClient._id === client._id}>
                                             <ListItemAvatar>
-                                                <Avatar>{client.name.charAt()}</Avatar>
+                                                <Avatar>{client.nome.charAt()}</Avatar>
                                             </ListItemAvatar>
-                                            <ListItemText primary={client.name}/>
+                                            <ListItemText primary={client.nome}/>
                                         </ListItemButton>
                                     </ListItem>
-                                )) */}   
+                                ))}   
                             </List>
                         </nav>
                     </Box>
@@ -129,6 +124,6 @@ Home.getInitialProps = async () => {
     const { data } = await res.json();
   
     return { clients: data }
-  }
+}
 
 export default Home
