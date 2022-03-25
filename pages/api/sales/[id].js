@@ -1,49 +1,38 @@
 import dbConnect from '../../../utils/dbConnect';
-import Client from '../../../models/mdClient';
-import Sale from '../../../models/mdSale';
+import Sale from '../../../models/mdSales';
 
 dbConnect();
 
 export default async (req, res) => {
-    const { query: { id }, method, body } = req;
+    const { query: { id }, method } = req;
 
     switch (method) {
         case 'GET':
             try {
-                const client = await Client.findById(id);
+                const sale = await Sale.findById(id);
 
-                if (!client) {
+                if (!sale) {
                     return res.status(400).json({ success: false });
                 }
 
-                res.status(200).json({ success: true, data: client });
+                res.status(200).json({ success: true, data: sale });
 
             } catch (error) {
                 res.status(400).json({ success: false });
             }
             break;
-        case 'POST': 
-            try{
-                const client = await Client.findById(id);
-                const sale = await Sale.create({...body, 'cliente': client.id});
-                res.status(201).json({success: true, data: sale})
-
-            }catch (error) {
-
-            }
-            break;
         case 'PUT':
             try {
-                const client = await Client.findByIdAndUpdate(id, req.body, {
+                const sale = await Sale.findByIdAndUpdate(id, req.body, {
                     new: true,
                     runValidators: true
                 });
 
-                if (!client) {
+                if (!sale) {
                     return res.status(400).json({ success: false });
                 }
 
-                res.status(200).json({ success: true, data: client });
+                res.status(200).json({ success: true, data: sale });
 
             } catch (error) {
                 res.status(400).json({ success: false });
@@ -51,9 +40,9 @@ export default async (req, res) => {
             break;
         case 'DELETE':
             try {
-                const deletedClient = await Client.deleteOne({ _id: id });
+                const deletedSale = await Sale.deleteOne({ _id: id });
 
-                if (!deletedClient) {
+                if (!deletedSale) {
                     return res.status(400).json({ success: false });
                 }
 

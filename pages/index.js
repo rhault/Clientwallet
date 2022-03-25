@@ -6,7 +6,7 @@ import {
 from '@mui/material';
 import TableComp from './componentes/TableComp'
 
-const Home = ({clients}) => {
+const Home = () => {
     const [selectClient, setSelectClient] = useState([]);
     const [value, setValue] = useState(0);
     const [listClient, setListClient] = useState([])
@@ -16,8 +16,14 @@ const Home = ({clients}) => {
     };
 
     useEffect(() => {
-        setSelectClient(clients[0])
-    }, [clients])
+        fetch('http://localhost:3001/api/clients')
+        .then((res) =>  res.json())
+        .then(({data}) => {
+            setSelectClient(data[0])
+            setListClient(data)
+            
+        })
+    }, [])
 
     const TabPanel = (props) => {
         const { children, value, index} = props;
@@ -34,7 +40,7 @@ const Home = ({clients}) => {
             <Grid container spacing={5}>
                 <Grid item xs={12}>
                     <h1>Carteira de Clientes</h1>  
-                    {clients.map(client => (
+                    {listClient.map(client => (
                         <div key={client._id}>{client.nome}</div>
                     ))}
                 </Grid>
@@ -42,7 +48,7 @@ const Home = ({clients}) => {
                     <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                         <nav aria-label="main mailbox folders">
                             <List>  
-                                {selectClient && clients.map((client) => (
+                                {selectClient && listClient.map((client) => (
                                    <ListItem disablePadding key={client._id} onClick={() => {setSelectClient(client)}}>
                                     <ListItemButton selected={selectClient._id === client._id}>
                                             <ListItemAvatar>
@@ -58,7 +64,7 @@ const Home = ({clients}) => {
                 </Grid>
                 <Grid item xs={6}>
                     
-                    {/* selectClient && <Grid container justifyContent="center">
+                    {selectClient && <Grid container justifyContent="center">
                         <Box sx={{ width: '100%' }}>
                             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
@@ -70,9 +76,9 @@ const Home = ({clients}) => {
                             <TabPanel value={value} index={0}>
                                 <Card>
                                     <CardHeader
-                                        avatar={<Avatar>{selectClient.name.charAt()}</Avatar>}
-                                        title={selectClient.name}
-                                        subheader="September 14, 2022"
+                                        avatar={<Avatar>{selectClient.nome.charAt()}</Avatar>}
+                                        title={selectClient.nome}
+                                        subheader={selectClient.data}
                                     />
                                     <CardContent>
                                         <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
@@ -82,11 +88,11 @@ const Home = ({clients}) => {
                                             </Grid>
                                             <Grid item xs={2} sm={4} md={4}>
                                                 <Typography>Telefone</Typography>
-                                                <Typography>00000444444dd</Typography>
+                                                <Typography>{selectClient.telefone}</Typography>
                                             </Grid>
                                             <Grid item xs={2} sm={4} md={4}>
                                                 <Typography>email</Typography>
-                                                <Typography>email</Typography>
+                                                <Typography>{selectClient.email}</Typography>
                                             </Grid>
                                             <Grid item xs={2} sm={4} md={4}>
                                                 <Typography>Tipo de cliente</Typography>
@@ -112,18 +118,18 @@ const Home = ({clients}) => {
                                 Item Three
                             </TabPanel>
                         </Box>
-                    </Grid> */}
+                    </Grid>}
                 </Grid>
             </Grid>
         </>
     );
 }
 
-Home.getInitialProps = async () => {
-    const res = await fetch('http://localhost:3000/api/clients');
+/* Home.getInitialProps = async () => {
+    const res = await fetch('http://localhost:3001/api/clients');
     const { data } = await res.json();
   
     return { clients: data }
 }
-
+ */
 export default Home
