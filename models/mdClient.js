@@ -20,7 +20,7 @@ const clientSchema = new Schema(
         cgc: {type: String},	
         nascimento: {type: String},	
         profissao: {type: String},
-        sale: { type: Schema.ObjectId, ref:"Sale" }	
+        sales: { type: Schema.ObjectId, ref:"Sale" }	
     },
     {
         timestamps:true

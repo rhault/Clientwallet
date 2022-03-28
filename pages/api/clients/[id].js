@@ -1,6 +1,5 @@
 import dbConnect from '../../../utils/dbConnect';
 import Client from '../../../models/mdClient';
-import Sale from '../../../models/mdSale';
 
 dbConnect();
 
@@ -10,40 +9,30 @@ export default async (req, res) => {
     switch (method) {
         case 'GET':
             try {
-                const client = await Client.findById(id);
+                const idClient = await Client.findById(id);
 
-                if (!client) {
+                if (!idClient) {
                     return res.status(400).json({ success: false });
                 }
 
-                res.status(200).json({ success: true, data: client });
+                res.status(200).json({ success: true, data: idClient });
 
             } catch (error) {
                 res.status(400).json({ success: false });
             }
             break;
-        case 'POST': 
-            try{
-                const client = await Client.findById(id);
-                const sale = await Sale.create({...body, 'cliente': client.id});
-                res.status(201).json({success: true, data: sale})
-
-            }catch (error) {
-
-            }
-            break;
         case 'PUT':
             try {
-                const client = await Client.findByIdAndUpdate(id, req.body, {
+                const updateClient = await Client.findByIdAndUpdate(id, req.body, {
                     new: true,
                     runValidators: true
                 });
 
-                if (!client) {
+                if (!updateClient) {
                     return res.status(400).json({ success: false });
                 }
 
-                res.status(200).json({ success: true, data: client });
+                res.status(200).json({ success: true, data: updateClient });
 
             } catch (error) {
                 res.status(400).json({ success: false });

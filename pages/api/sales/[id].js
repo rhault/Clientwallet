@@ -9,13 +9,13 @@ export default async (req, res) => {
     switch (method) {
         case 'GET':
             try {
-                const sale = await Sale.findById(id);
+                const idSale = await Sale.findById(id);
 
-                if (!sale) {
+                if (!idSale) {
                     return res.status(400).json({ success: false });
                 }
 
-                res.status(200).json({ success: true, data: sale });
+                res.status(200).json({ success: true, data: idSale });
 
             } catch (error) {
                 res.status(400).json({ success: false });
@@ -23,16 +23,16 @@ export default async (req, res) => {
             break;
         case 'PUT':
             try {
-                const sale = await Sale.findByIdAndUpdate(id, req.body, {
+                const updateSale = await Sale.findByIdAndUpdate(id, req.body, {
                     new: true,
                     runValidators: true
                 });
 
-                if (!sale) {
+                if (!updateSale) {
                     return res.status(400).json({ success: false });
                 }
 
-                res.status(200).json({ success: true, data: sale });
+                res.status(200).json({ success: true, data: updateSale });
 
             } catch (error) {
                 res.status(400).json({ success: false });

@@ -18,8 +18,8 @@ export default async (req, res) => {
             break;
         case 'POST':
             try {
-                const clients = await Client.create(req.body);
-                res.status(201).json({ success: true, data: clients })
+                const newClients = await Client.create(req.body);
+                res.status(201).json({ success: true, data: newClients })
 
             } catch (error) {
                 console.log(error)
