@@ -1,5 +1,6 @@
 import dbConnect from '../../../utils/dbConnect';
 import Sale from '../../../models/mdSales';
+import Client from '../../../models/mdClient';
 
 dbConnect();
 
@@ -19,8 +20,12 @@ export default async (req, res) => {
         case 'POST':
             try {
                 const newSales = await Sale.create(req.body);
-                res.status(201).json({ success: true, data: newSales })
+                await newSales.save()
 
+                const idClient = await Client.findById(req.body.cliente)
+                idClient.sales.push(newSales._id)
+                idClient.save()
+                res.status(201).json({ success: true, data: newSales }) 
             } catch (error) {
                 console.log(error)
                 res.status(400).json({ success: false });
